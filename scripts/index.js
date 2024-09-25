@@ -3,8 +3,12 @@
 // @todo: DOM узлы
 
 // @todo: Функция создания карточки
+
+const cardTemplate = document
+  .querySelector("#card-template")
+  .content.querySelector(".card");
+
 function createCard(card, deleteCard) {
-  const cardTemplate = document.querySelector("#card-template").content;
   const cardElement = cardTemplate.cloneNode(true);
 
   cardElement.querySelector(".card__image").src = card.link;
@@ -20,8 +24,7 @@ function createCard(card, deleteCard) {
 }
 
 // @todo: Функция удаления карточки
-function deleteCard() {
-  const cardElement = document.querySelector(".card");
+function deleteCard(cardElement) {
   cardElement.remove();
 }
 
