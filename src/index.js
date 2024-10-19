@@ -7,6 +7,7 @@ import {
 } from "./components/modal.js";
 import { createCard } from "./components/card.js";
 
+// @todo: Попапы
 const editProfilePopup = document.querySelector(".popup_type_edit");
 addPopupListeners(editProfilePopup);
 const addCardPopup = document.querySelector(".popup_type_new-card");
@@ -16,13 +17,13 @@ addPopupListeners(imagePopup);
 
 // @todo: Кнопки открытия попапов
 const editProfileButton = document.querySelector(".profile__edit-button");
-editProfileButton.addEventListener("click", fillFormWithCurrentValues);
+editProfileButton.addEventListener("click", openEditForm);
 
 const addCardButton = document.querySelector(".profile__add-button");
 addCardButton.addEventListener("click", () => openModal(addCardPopup));
 
-// @todo: Заполнить форму текущими значениями
-function fillFormWithCurrentValues() {
+// @todo: Заполнить и открыть форму редактирования профиля
+function openEditForm() {
   const profileTitle = document.querySelector(".profile__title");
   const profileDescription = document.querySelector(".profile__description");
   const nameInput = editProfilePopup.querySelector(".popup__input_type_name");
@@ -36,13 +37,15 @@ function fillFormWithCurrentValues() {
 }
 
 // @todo: Отредактировать профиль
-const formElement = editProfilePopup.querySelector(
+const editProfileForm = editProfilePopup.querySelector(
   '.popup__form[name="edit-profile"]'
 );
-formElement.addEventListener("submit", (evt) => {
+editProfileForm.addEventListener("submit", (evt) => {
   evt.preventDefault();
-  const nameInput = formElement.querySelector(".popup__input_type_name");
-  const jobInput = formElement.querySelector(".popup__input_type_description");
+  const nameInput = editProfileForm.querySelector(".popup__input_type_name");
+  const jobInput = editProfileForm.querySelector(
+    ".popup__input_type_description"
+  );
   const profileTitle = document.querySelector(".profile__title");
   const profileDescription = document.querySelector(".profile__description");
 
@@ -64,7 +67,8 @@ newCardForm.addEventListener("submit", (evt) => {
 
   const newCardElement = createCard(
     { name: cardNameInput.value, link: cardLinkInput.value },
-    deleteCard
+    deleteCard,
+    handleLike
   );
   cardsContainer.prepend(newCardElement);
 
@@ -77,9 +81,35 @@ function deleteCard(cardElement) {
   cardElement.remove();
 }
 
+// @todo: Функция лайка карточки
+function handleLike(likeButton) {
+  likeButton.classList.toggle("card__like-button_is-active");
+}
+
 // @todo: Вывести карточки на страницу
 const cardsContainer = document.querySelector(".places__list");
 initialCards.forEach((card) => {
-  const cardElement = createCard(card, deleteCard);
+  const cardElement = createCard(card, deleteCard, handleLike);
   cardsContainer.append(cardElement);
 });
+
+// @todo: Открытие попапа с изображением при клике на карточку
+cardsContainer.addEventListener("click", (evt) => {
+  if (evt.target.classList.contains("card__image")) {
+    const cardName = evt.target.alt;
+    const cardLink = evt.target.src;
+    openImagePopup({ name: cardName, link: cardLink });
+  }
+});
+
+// @todo: Открыть попап с изображением
+const openImagePopup = ({ name, link }) => {
+  const popupImage = document.querySelector(".popup__image");
+  const popupCaption = document.querySelector(".popup__caption");
+
+  popupImage.src = link;
+  popupImage.alt = name;
+  popupCaption.textContent = name;
+
+  openModal(imagePopup);
+};

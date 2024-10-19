@@ -11,7 +11,6 @@ const handleEscKeyUp = (e) => {
 // @todo: Функция открытия попапа
 export const openModal = (modal) => {
   modal.classList.add("popup_is-opened");
-  setTimeout(() => {}, 10);
   document.addEventListener("keyup", handleEscKeyUp);
 };
 
