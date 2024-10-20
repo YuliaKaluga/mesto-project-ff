@@ -1,7 +1,7 @@
 import { openModal } from "./modal.js";
 
 // @todo: Функция создания новой карточки
-export const createCard = (card, deleteCard, handleLike) => {
+export const createCard = (card, deleteCard, handleLike, openImagePopup) => {
   const cardTemplate = document
     .querySelector("#card-template")
     .content.querySelector(".card");
@@ -17,7 +17,7 @@ export const createCard = (card, deleteCard, handleLike) => {
   cardImage.src = card.link;
   cardImage.alt = card.name;
 
-  // @todo: Поставить лайк, используя переданный обработчик
+  // @todo: Поставить лайк
   likeButton.addEventListener("click", () => {
     handleLike(likeButton);
   });
@@ -27,5 +27,20 @@ export const createCard = (card, deleteCard, handleLike) => {
     deleteCard(cardElement);
   });
 
+  // @todo: Открыть попап с изображением
+  cardImage.addEventListener("click", () => {
+    openImagePopup({ name: card.name, link: card.link });
+  });
+
   return cardElement;
+};
+
+// @todo: Функция удаления карточки
+export const deleteCard = (cardElement) => {
+  cardElement.remove();
+};
+
+// @todo: Функция лайка карточки
+export const handleLike = (likeButton) => {
+  likeButton.classList.toggle("card__like-button_is-active");
 };

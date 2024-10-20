@@ -5,7 +5,7 @@ import {
   closeModal,
   addPopupListeners,
 } from "./components/modal.js";
-import { createCard } from "./components/card.js";
+import { createCard, deleteCard, handleLike } from "./components/card.js";
 
 // @todo: Попапы
 const editProfilePopup = document.querySelector(".popup_type_edit");
@@ -68,7 +68,8 @@ newCardForm.addEventListener("submit", (evt) => {
   const newCardElement = createCard(
     { name: cardNameInput.value, link: cardLinkInput.value },
     deleteCard,
-    handleLike
+    handleLike,
+    openImagePopup
   );
   cardsContainer.prepend(newCardElement);
 
@@ -76,30 +77,11 @@ newCardForm.addEventListener("submit", (evt) => {
   newCardForm.reset();
 });
 
-// @todo: Функция удаления карточки
-function deleteCard(cardElement) {
-  cardElement.remove();
-}
-
-// @todo: Функция лайка карточки
-function handleLike(likeButton) {
-  likeButton.classList.toggle("card__like-button_is-active");
-}
-
 // @todo: Вывести карточки на страницу
 const cardsContainer = document.querySelector(".places__list");
 initialCards.forEach((card) => {
-  const cardElement = createCard(card, deleteCard, handleLike);
+  const cardElement = createCard(card, deleteCard, handleLike, openImagePopup);
   cardsContainer.append(cardElement);
-});
-
-// @todo: Открытие попапа с изображением при клике на карточку
-cardsContainer.addEventListener("click", (evt) => {
-  if (evt.target.classList.contains("card__image")) {
-    const cardName = evt.target.alt;
-    const cardLink = evt.target.src;
-    openImagePopup({ name: cardName, link: cardLink });
-  }
 });
 
 // @todo: Открыть попап с изображением
